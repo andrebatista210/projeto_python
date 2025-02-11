@@ -48,3 +48,17 @@ import math
 # print(f'O quadrado de {num_1} é igual a {tot}')
 
 # print(f"{math.pi:.2f}")
+
+try:
+    num_1 = int(input('Digite o primeiro número (dividendo): '))
+    num_2 = int(input('Digite o segundo número (divisor): '))
+
+    tot = num_1 // num_2  # Divisão inteira
+
+    print(f'O resultado da divisão inteira {num_1} // {num_2} é igual a {tot}')
+except ZeroDivisionError:
+    print('Erro: divisão por zero não é permitida.')
+except ValueError:
+    print('Erro: digite apenas números inteiros.')
+except Exception as e:
+    print(f'Ocorreu um erro inesperado: {e}')
