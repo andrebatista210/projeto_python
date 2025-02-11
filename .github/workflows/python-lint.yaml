@@ -29,7 +29,7 @@ jobs:
           pip install black flake8 pyspark
 
       - name: Verificar sintaxe com Black
-        run: black --check .
+        run: black --check --diff .
 
       - name: Verificar erros com Flake8 (Python e PySpark)
         run: flake8 .
