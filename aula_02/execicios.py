@@ -1,4 +1,4 @@
-import math
+# import math
 
 # num = 0
 # for _ in range(2):
@@ -26,7 +26,7 @@ import math
 # num_2 = int(input("Digite o segundo número (divisor): "))
 
 # tot = num_1 // num_2
-# print(f"O resultado da divisão inteira {num_1} // {num_2} é igual a {tot}")
+# print(f"O resultado da divisão inteira {num_1} // {num_2} é {tot}")
 
 # num_1 = int(input("Digite um número para saber o quadrado: "))
 # tot = num_1 * num_1
@@ -36,15 +36,12 @@ import math
 # tot = pow(num_1, 2)
 # print(f"O quadrado de {num_1} é igual a {tot}")
 
-# Exibe o valor de PI com duas casas decimais
-# print(f"{math.pi:.2f}")
-
 try:
     num_1 = int(input("Digite o primeiro número (dividendo): "))
     num_2 = int(input("Digite o segundo número (divisor): "))
 
     tot = num_1 // num_2  # Divisão inteira
-    print(f"O resultado da divisão inteira {num_1} // {num_2} é igual a {tot}")
+    print(f"O resultado da divisão inteira {num_1} // {num_2} é {tot}")
 
 except ZeroDivisionError:
     print("Erro: divisão por zero não é permitida.")
