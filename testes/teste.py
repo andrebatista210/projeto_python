@@ -8,7 +8,7 @@ spark = SparkSession.builder.appName("TestePySpark").getOrCreate()
 data = [
     ("Alice", 25, 3000.50),
     ("Bob", 30, 4500.75),
-    ("Carol", 35, 5000.25)
+    ("Carol", 35, 5000.25),
 ]
 columns = ["nome", "idade", "salario"]
 df = spark.createDataFrame(data, columns)
@@ -17,7 +17,7 @@ df = spark.createDataFrame(data, columns)
 df_filtered = df.filter(col("idade") > 28)
 df_aggregated = df_filtered.groupBy().agg(
     sum("salario").alias("salario_total"),
-    avg("salario").alias("salario_medio")
+    avg("salario").alias("salario_medio"),
 )
 
 df.show()
