@@ -24,7 +24,7 @@ jobs:
           python-version: "3.10"
       
       - name: Teste Script
-        run: python aula1/main.py
+        run: python aula_01/main.py
 
       # - name: Instalar dependências
       #   run: |
