@@ -1,5 +1,5 @@
 name: Python Syntax Check
-
+run-name: Python Syntax Check
 on: 
   push:
     branches:
