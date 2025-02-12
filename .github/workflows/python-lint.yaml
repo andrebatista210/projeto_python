@@ -90,40 +90,52 @@ jobs:
       - name: Run Pylint (code analysis)
         run: pylint --output-format=parseable $(git ls-files '*.py')
 
-  run-spark:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 2  # Garante que temos histórico suficiente para comparação
+run-spark:
+  runs-on: ubuntu-latest
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # Fetch all history
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      - name: Install PySpark
-        run: pip install pyspark
+    - name: Install PySpark
+      run: pip install pyspark
 
-      - name: Get modified Python and PySpark files
-        id: changed-files
-        run: |
-          git fetch origin  # Garante que estamos atualizados
-          BASE_BRANCH=$(git rev-parse origin/${{ github.event.pull_request.base.ref }})
-          FILES=$(git diff --name-only $BASE_BRANCH HEAD -- '*.py' '*.pyspark')
-          
-          if [ -z "$FILES" ]; then
-            echo "Nenhum arquivo Python ou PySpark foi modificado. Abortando..."
-            exit 1
-          fi
+    - name: Get modified Python and PySpark files
+      id: changed-files
+      shell: bash
+      run: |
+        # Use github.event.pull_request.base.sha para PRs, ou HEAD para pushes
+        if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+        else
+          BASE_SHA=$(git rev-parse HEAD^1) # Parent of the HEAD commit for pushes
+        fi
 
-          echo "::set-output name=files::$FILES"  # Define a saída para uso no próximo passo
-          echo "Arquivos modificados: $FILES"
+        FILES=$(git diff --name-only $BASE_SHA HEAD -- '*.py' '*.pyspark')
 
-      - name: Run modified Python and PySpark scripts
-        run: |
-          for file in ${{ steps.changed-files.outputs.files }}; do
-            echo "Running $file..."
+        if [[ -z "$FILES" ]]; then
+          echo "Nenhum arquivo Python ou PySpark foi modificado. Abortando..."
+          exit 0 # Saída 0 para indicar sucesso (nenhum arquivo alterado)
+        fi
+
+        echo "::set-output name=files::$FILES"
+        echo "Arquivos modificados: $FILES"
+
+    - name: Run modified Python and PySpark scripts
+      if: steps.changed-files.outputs.files != '' # Condicional para evitar erro se $FILES for vazio
+      run: |
+        for file in ${{ steps.changed-files.outputs.files }}; do
+          echo "Running $file..."
+          # Execute com pyspark se for arquivo pyspark
+          if [[ "$file" == *.pyspark ]]; then
+             pyspark "$file" || { echo "Erro detectado no arquivo: $file"; exit 1; }
+          else
             python "$file" || { echo "Erro detectado no arquivo: $file"; exit 1; }
-          done
+          fi
+        done
