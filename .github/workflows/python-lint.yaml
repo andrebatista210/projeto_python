@@ -1,50 +1,51 @@
-name: Python Syntax Check
+name: Lint and Type Check
 
-on: 
+on:
   push:
-    branches:
-      - main
-      - develop
   pull_request:
-    branches:
-      - main
-      - develop
 
 jobs:
-  python_syntax_check:
+  setup:
     runs-on: ubuntu-latest
-
+    outputs:
+      python-version: "3.10"
     steps:
-      - name: Checkout do código
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Configurar Python
-        uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
-      - name: Instalar dependências do Python e PySpark
+      - name: Install dependencies (incluindo PySpark)
         run: |
-          python -m pip install --upgrade pip
-          pip install black flake8 pyspark
-
-      - name: Verificar sintaxe com Black
+          pip install black flake8 mypy pylint pyspark
+          
+  black:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Black (code formatting)
         run: black --check --diff .
 
-      - name: Verificar erros com Flake8 (Python e PySpark)
+  flake8:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Flake8 (style check)
         run: flake8 .
 
-      - name: Teste de importação do PySpark
-        run: python -c "import pyspark; print('PySpark importado com sucesso!')"
+  mypy:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Mypy (type checking)
+        run: mypy .
 
-      - name: Rodar um teste básico do PySpark
-        run: |
-          python - <<EOF
-          from pyspark.sql import SparkSession
-
-          spark = SparkSession.builder.appName("TestSession").getOrCreate()
-          df = spark.createDataFrame([(1, "Teste")], ["id", "nome"])
-          df.show()
-          print("PySpark rodou com sucesso!")
-          spark.stop()
-          EOF
+  pylint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Pylint (code analysis)
+        run: pylint $(git ls-files '*.py')
