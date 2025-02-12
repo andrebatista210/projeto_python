@@ -1,3 +1,6 @@
+"""Módulo principal para execução das funções principais do projeto."""
+
+
 # Exercicio 1
 
 # texto = input("Digite seu nome: ")

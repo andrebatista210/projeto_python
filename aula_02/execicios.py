@@ -1,3 +1,6 @@
+"""Módulo contendo exercícios e exemplos de lógica em Python."""
+
+
 # import math
 
 # num = 0
