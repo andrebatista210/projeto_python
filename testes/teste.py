@@ -3,7 +3,7 @@ filtragem, agregação e salvamento de resultados em formato Parquet.
 """
 
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, sum, avg
+from pyspark.sql.functions import col, sum as sum_func, avg
 
 # Criar sessão Spark
 spark = SparkSession.builder.appName("TestePySpark").getOrCreate()
@@ -20,7 +20,7 @@ df = spark.createDataFrame(data, columns)
 # Transformações: Filtrar, Agregar e Exibir
 df_filtered = df.filter(col("idade") > 28)
 df_aggregated = df_filtered.groupBy().agg(
-    sum("salario").alias("salario_total"),
+    sum_func("salario").alias("salario_total"),
     avg("salario").alias("salario_medio"),
 )
 
