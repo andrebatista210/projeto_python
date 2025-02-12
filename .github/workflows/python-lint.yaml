@@ -95,6 +95,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # Garante que temos histórico suficiente para comparação
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -107,12 +109,17 @@ jobs:
       - name: Get modified Python and PySpark files
         id: changed-files
         run: |
-          FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} -- '*.py' '*.pyspark')
+          git fetch origin  # Garante que estamos atualizados
+          BASE_BRANCH=$(git rev-parse origin/${{ github.event.pull_request.base.ref }})
+          FILES=$(git diff --name-only $BASE_BRANCH HEAD -- '*.py' '*.pyspark')
+          
           if [ -z "$FILES" ]; then
             echo "Nenhum arquivo Python ou PySpark foi modificado. Abortando..."
             exit 1
           fi
+
           echo "FILES=$FILES" >> $GITHUB_ENV
+          echo "Arquivos modificados: $FILES"
 
       - name: Run modified Python and PySpark scripts
         run: |
