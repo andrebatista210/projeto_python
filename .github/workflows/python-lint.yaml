@@ -118,13 +118,12 @@ jobs:
             exit 1
           fi
 
-          echo "FILES=$FILES" >> $GITHUB_ENV
+          echo "::set-output name=files::$FILES"  # Define a saída para uso no próximo passo
           echo "Arquivos modificados: $FILES"
 
       - name: Run modified Python and PySpark scripts
         run: |
-          set -e  # Interrompe no primeiro erro
-          for file in $FILES; do
+          for file in ${{ steps.changed-files.outputs.files }}; do
             echo "Running $file..."
-            python "$file" 2>&1 | tee log.txt || { echo "Erro detectado no arquivo: $file"; exit 1; }
+            python "$file" || { echo "Erro detectado no arquivo: $file"; exit 1; }
           done
