@@ -82,7 +82,7 @@ jobs:
           python-version: "3.10"
 
       - name: Install Pylint and PySpark
-        run: pip install pylint pyspark
+        run: pip install --upgrade pylint==2.17.4 pyspark
 
       - name: Check Pylint Installation
         run: pylint --version
