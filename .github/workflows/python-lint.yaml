@@ -88,4 +88,5 @@ jobs:
         run: pylint --version
 
       - name: Run Pylint (code analysis)
-        run: pylint $(git ls-files '*.py')
+        run: pylint --output-format=parseable $(git ls-files '*.py')
+
