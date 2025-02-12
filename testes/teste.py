@@ -1,3 +1,7 @@
+"""Este módulo executa operações com PySpark, incluindo criação de DataFrame,
+filtragem, agregação e salvamento de resultados em formato Parquet.
+"""
+
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, sum, avg
 
@@ -25,7 +29,7 @@ df_filtered.show()
 df_aggregated.show()
 
 # Salvar DataFrame em um arquivo parquet
-df_aggregated.write.mode("overwite").parquet("output/salarios")
+df_aggregated.write.mode("overwrite").parquet("output/salarios")
 
 # Encerrar sessão Spark
 spark.stop()
