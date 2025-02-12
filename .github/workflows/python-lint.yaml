@@ -5,10 +5,8 @@ on:
   pull_request:
 
 jobs:
-  setup:
+  black:
     runs-on: ubuntu-latest
-    outputs:
-      python-version: "3.10"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -18,41 +16,71 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install dependencies (incluindo PySpark)
-        run: |
-          pip install --upgrade black flake8 mypy pylint pyspark
+      - name: Install Black
+        run: pip install black
 
-      - name: Check Installed Versions
-        run: |
-          black --version
-          flake8 --version
-          mypy --version
-          pylint --version
+      - name: Check Black Installation
+        run: black --version
 
-  black:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
       - name: Run Black (code formatting)
         run: black --check --diff .
 
   flake8:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Flake8
+        run: pip install flake8
+
+      - name: Check Flake8 Installation
+        run: flake8 --version
+
       - name: Run Flake8 (style check)
         run: flake8 .
 
   mypy:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Mypy
+        run: pip install mypy
+
+      - name: Check Mypy Installation
+        run: mypy --version
+
       - name: Run Mypy (type checking)
         run: mypy .
 
   pylint:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Pylint
+        run: pip install pylint
+
+      - name: Check Pylint Installation
+        run: pylint --version
+
       - name: Run Pylint (code analysis)
         run: pylint $(git ls-files '*.py')
