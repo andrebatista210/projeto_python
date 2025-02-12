@@ -28,7 +28,7 @@ df.show()
 df_filtered.show()
 df_aggregated.show()
 
-# Salvar DataFrame em um arquivo parquet
+# Salvar DataFrame em um arquivo parquet (deixando erro interromper execução)
 df_aggregated.write.mode("overwrite").parquet("output/salarios")
 
 # Encerrar sessão Spark
