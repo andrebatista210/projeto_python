@@ -39,15 +39,15 @@
 # print(f"O quadrado de {num_1} é igual a {tot}")
 
 try:
-    num_1 = int(input("Digite o primeiro número (dividendo): "))
-    num_2 = int(input("Digite o segundo número (divisor): "))
+    dividendo = int(input("Digite o dividendo: "))
+    divisor = int(input("Digite o divisor: "))
 
-    tot = num_1 // num_2  # Divisão inteira
-    print(f"O resultado da divisão inteira {num_1} // {num_2} é {tot}")
+    resultado = dividendo // divisor  # Divisão inteira
+    print(f"O resultado da divisão inteira {dividendo} // {divisor} é {resultado}")
 
 except ZeroDivisionError:
     print("Erro: divisão por zero não é permitida.")
 except ValueError:
     print("Erro: digite apenas números inteiros.")
-except Exception as e:
+except Exception as e:  # pylint: disable=broad-exception-caught
     print(f"Ocorreu um erro inesperado: {e}")
