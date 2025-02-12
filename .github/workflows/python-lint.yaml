@@ -20,8 +20,15 @@ jobs:
 
       - name: Install dependencies (incluindo PySpark)
         run: |
-          pip install black flake8 mypy pylint pyspark
-          
+          pip install --upgrade black flake8 mypy pylint pyspark
+
+      - name: Check Installed Versions
+        run: |
+          black --version
+          flake8 --version
+          mypy --version
+          pylint --version
+
   black:
     needs: setup
     runs-on: ubuntu-latest
