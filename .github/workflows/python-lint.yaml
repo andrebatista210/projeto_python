@@ -108,10 +108,13 @@ jobs:
         id: changed-files
         run: |
           FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} -- '*.py' '*.pyspark')
+          if [ -z "$FILES" ]; then
+            echo "Nenhum arquivo Python ou PySpark foi modificado. Abortando..."
+            exit 1
+          fi
           echo "FILES=$FILES" >> $GITHUB_ENV
 
       - name: Run modified Python and PySpark scripts
-        if: env.FILES != ''
         run: |
           set -e  # Interrompe no primeiro erro
           for file in $FILES; do
