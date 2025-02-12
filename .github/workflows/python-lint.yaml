@@ -113,6 +113,7 @@ jobs:
       - name: Run modified Python and PySpark scripts
         if: env.FILES != ''
         run: |
+          set -e  # Faz o script falhar se qualquer comando retornar erro
           for file in $FILES; do
             echo "Running $file..."
             python "$file"
