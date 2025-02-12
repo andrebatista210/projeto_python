@@ -56,11 +56,16 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Mypy
-        run: pip install mypy
+      - name: Install Mypy and PySpark
+        run: pip install mypy pyspark
 
       - name: Check Mypy Installation
         run: mypy --version
+
+      - name: Create Mypy Config
+        run: |
+          echo "[mypy]" > mypy.ini
+          echo "ignore_missing_imports = True" >> mypy.ini
 
       - name: Run Mypy (type checking)
         run: mypy .
@@ -76,8 +81,8 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install Pylint
-        run: pip install pylint
+      - name: Install Pylint and PySpark
+        run: pip install pylint pyspark
 
       - name: Check Pylint Installation
         run: pylint --version
