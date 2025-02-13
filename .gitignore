@@ -169,3 +169,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Ignorar ambientes virtuais e dependências do Poetry
+.venv/
+poetry.lock
+pyproject.toml
+.pylintrc
