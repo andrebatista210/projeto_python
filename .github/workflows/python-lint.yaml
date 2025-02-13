@@ -139,3 +139,4 @@ run-spark:
             python "$file" || { echo "Erro detectado no arquivo: $file"; exit 1; }
           fi
         done
+        
